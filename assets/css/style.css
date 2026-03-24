@@ -683,6 +683,23 @@ select {
   padding: var(--space-5);
 }
 
+.info-block-media {
+  margin: 0 0 var(--space-4);
+}
+
+.info-block-media img {
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.info-block-media figcaption {
+  margin-top: var(--space-2);
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
 .listing-meta {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-3);
