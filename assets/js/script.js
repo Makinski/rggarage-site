@@ -46,7 +46,7 @@ if (mainGalleryImage && galleryThumbs.length) {
   const nextImageLabel = isBulgarian ? 'Следваща снимка' : 'Next image';
 
   if (document.body.classList.contains('page-e92') && thumbs.length >= 2) {
-    const imagePrefix = mainGalleryImage.src.includes('/en/cars/bmw-e92-m3/') ? '../../../' : '../../';
+    const imagePrefix = window.location.pathname.startsWith('/en/') ? '../../../' : '../../';
     const e92Images = [
       {
         src: `${imagePrefix}assets/images/cars/m3/e92-vin-collage.jpg`,
