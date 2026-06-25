@@ -45,6 +45,33 @@ if (mainGalleryImage && galleryThumbs.length) {
   const previousImageLabel = isBulgarian ? 'Предишна снимка' : 'Previous image';
   const nextImageLabel = isBulgarian ? 'Следваща снимка' : 'Next image';
 
+  if (document.body.classList.contains('page-e92') && thumbs.length >= 2) {
+    const imagePrefix = mainGalleryImage.src.includes('/en/cars/bmw-e92-m3/') ? '../../../' : '../../';
+    const e92Images = [
+      {
+        src: `${imagePrefix}assets/images/cars/m3/e92-vin-collage.jpg`,
+        alt: isBulgarian ? 'BMW M3 E92 в Alpinweiss III, външни детайли' : 'BMW M3 E92 in Alpine White III exterior details',
+      },
+      {
+        src: `${imagePrefix}assets/images/cars/m3/e92-vin-front.jpg`,
+        alt: isBulgarian ? 'BMW M3 E92 фронтален изглед' : 'BMW M3 E92 front view',
+      },
+    ];
+
+    e92Images.forEach((image, index) => {
+      const thumb = thumbs[index];
+      const thumbImage = thumb.querySelector('img');
+
+      thumb.dataset.galleryImage = image.src;
+      thumb.dataset.galleryAlt = image.alt;
+
+      if (thumbImage) {
+        thumbImage.src = image.src;
+        thumbImage.alt = image.alt;
+      }
+    });
+  }
+
   if (activeIndex < 0) {
     activeIndex = 0;
   }
@@ -113,6 +140,8 @@ if (mainGalleryImage && galleryThumbs.length) {
     document.body.classList.remove('lightbox-open');
     mainGalleryImage.focus();
   };
+
+  setActiveThumb(activeIndex);
 
   thumbs.forEach((thumb, index) => {
     thumb.addEventListener('click', () => {
