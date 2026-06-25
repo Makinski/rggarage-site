@@ -47,13 +47,14 @@ if (mainGalleryImage && galleryThumbs.length) {
 
   if (document.body.classList.contains('page-e92') && thumbs.length >= 2) {
     const imagePrefix = window.location.pathname.startsWith('/en/') ? '../../../' : '../../';
+    const imageVersion = 'v=20260625';
     const e92Images = [
       {
-        src: `${imagePrefix}assets/images/cars/m3/e92-vin-collage.jpg`,
+        src: `${imagePrefix}assets/images/cars/m3/e92-vin-collage.jpg?${imageVersion}`,
         alt: isBulgarian ? 'BMW M3 E92 в Alpinweiss III, външни детайли' : 'BMW M3 E92 in Alpine White III exterior details',
       },
       {
-        src: `${imagePrefix}assets/images/cars/m3/e92-vin-front.jpg`,
+        src: `${imagePrefix}assets/images/cars/m3/e92-vin-front.jpg?${imageVersion}`,
         alt: isBulgarian ? 'BMW M3 E92 фронтален изглед' : 'BMW M3 E92 front view',
       },
     ];
