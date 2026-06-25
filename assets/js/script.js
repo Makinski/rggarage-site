@@ -45,6 +45,26 @@ if (mainGalleryImage && galleryThumbs.length) {
   const previousImageLabel = isBulgarian ? 'Предишна снимка' : 'Previous image';
   const nextImageLabel = isBulgarian ? 'Следваща снимка' : 'Next image';
 
+  if (document.body.classList.contains('page-e92')) {
+    const imagePrefix = window.location.pathname.startsWith('/en/') ? '../../../' : '../../';
+    const stableE92Image = `${imagePrefix}assets/images/cars/m3/1428d412801459c4030926c348fc301b.jpg?v=20260625d`;
+    const stableE92Alt = isBulgarian ? 'BMW M3 E92 фронтален изглед' : 'BMW M3 E92 front view';
+
+    thumbs.forEach((thumb) => {
+      const thumbImage = thumb.querySelector('img');
+      thumb.dataset.galleryImage = stableE92Image;
+      thumb.dataset.galleryAlt = stableE92Alt;
+
+      if (thumbImage) {
+        thumbImage.src = stableE92Image;
+        thumbImage.alt = stableE92Alt;
+      }
+    });
+
+    mainGalleryImage.src = stableE92Image;
+    mainGalleryImage.alt = stableE92Alt;
+  }
+
   if (activeIndex < 0) {
     activeIndex = 0;
   }
