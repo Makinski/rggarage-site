@@ -1,0 +1,40 @@
+name: Cache bust M3 image paths
+
+on:
+  push:
+    paths:
+      - .github/workflows/cache-bust-m3-images.yml
+
+permissions:
+  contents: write
+
+jobs:
+  cache-bust-m3-images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add M3 image cache version
+        shell: bash
+        run: |
+          set -euo pipefail
+          perl -0pi -e 's#(assets/images/cars/m3/e92-(?:doors-open|m3-detail|engine|wheel|rear)\.jpg)(?!\?v=2)#$1?v=2#g' \
+            index.html \
+            cars/index.html \
+            en/index.html \
+            en/cars/index.html \
+            cars/bmw-e92-m3/index.html \
+            en/cars/bmw-e92-m3/index.html
+          rm -f .github/workflows/cache-bust-m3-images.yml
+
+      - name: Commit cache bust
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html cars/index.html en/index.html en/cars/index.html cars/bmw-e92-m3/index.html en/cars/bmw-e92-m3/index.html .github/workflows/cache-bust-m3-images.yml
+          git commit -m "Cache bust BMW M3 image paths"
+          git push
