@@ -1015,3 +1015,15 @@ body.lightbox-open {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+body.page-e92 .thumb img[src*='e92-m3-detail.jpg'],
+body.page-e92 #main-gallery-image[src*='e92-m3-detail.jpg'],
+body.page-e92 .gallery-lightbox-image[src*='e92-m3-detail.jpg'] {
+  transform: rotate(90deg) scale(1.45);
+}
+
+body.page-e92 .gallery-main,
+body.page-e92 .thumb,
+body.page-e92 .gallery-lightbox-image-wrap {
+  overflow: hidden;
+}
