@@ -1,0 +1,77 @@
+name: Fix M3 gallery JavaScript
+
+on:
+  push:
+    paths:
+      - .github/workflows/fix-m3-gallery-js.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix-m3-gallery-js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Remove E92 gallery override and cache-bust script
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          script = Path("assets/js/script.js")
+          text = script.read_text(encoding="utf-8")
+
+          text = text.replace("""const stableM3PreviewPath = '1428d412801459c4030926c348fc301b.jpg?v=20260625e';
+
+document.querySelectorAll('img[src*=\"assets/images/cars/m3/e92-vin-front.jpg\"]').forEach((image) => {
+  image.src = image.src.replace('e92-vin-front.jpg', stableM3PreviewPath);
+});
+
+""", "")
+
+          text = text.replace("""  if (document.body.classList.contains('page-e92')) {
+    const imagePrefix = window.location.pathname.startsWith('/en/') ? '../../../' : '../../';
+    const stableE92Image = `${imagePrefix}assets/images/cars/m3/${stableM3PreviewPath}`;
+    const stableE92Alt = isBulgarian ? 'BMW M3 E92 фронтален изглед' : 'BMW M3 E92 front view';
+
+    thumbs.forEach((thumb) => {
+      const thumbImage = thumb.querySelector('img');
+      thumb.dataset.galleryImage = stableE92Image;
+      thumb.dataset.galleryAlt = stableE92Alt;
+
+      if (thumbImage) {
+        thumbImage.src = stableE92Image;
+        thumbImage.alt = stableE92Alt;
+      }
+    });
+
+    mainGalleryImage.src = stableE92Image;
+    mainGalleryImage.alt = stableE92Alt;
+  }
+
+""", "")
+
+          script.write_text(text, encoding="utf-8")
+
+          for html in Path(".").rglob("*.html"):
+              content = html.read_text(encoding="utf-8")
+              updated = re.sub(r'((?:\.\./){0,3}assets/js/script\.js)(?:\?v=\d+)?', r'\1?v=3', content)
+              if updated != content:
+                  html.write_text(updated, encoding="utf-8")
+
+          Path(".github/workflows/fix-m3-gallery-js.yml").unlink(missing_ok=True)
+
+      - name: Commit JS fix
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/js/script.js .github/workflows/fix-m3-gallery-js.yml
+          find . -name '*.html' -print0 | xargs -0 git add
+          git commit -m "Fix BMW M3 gallery script override"
+          git push
